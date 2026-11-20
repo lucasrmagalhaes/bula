@@ -1,0 +1,31 @@
+# segredos e configuração local
+.env
+.env.*
+!.env.example
+
+# dados gerados: Postgres embutido, modelos de embedding, MLflow e corpus baixado
+data/
+mlruns/
+mlartifacts/
+
+# Node
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# editor e sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
