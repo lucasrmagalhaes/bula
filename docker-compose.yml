@@ -1,0 +1,52 @@
+# Caminho de produção: Postgres com pgvector, serviço de conhecimento e agente.
+# Só o agente publica porta. O serviço de conhecimento e o banco ficam na rede interna.
+#
+#   cp .env.example .env            # preencha a chave do provedor
+#   docker compose up --build -d
+#   docker compose run --rm knowledge bula-knowledge ingest
+#
+# Defina POSTGRES_PASSWORD e KNOWLEDGE_API_TOKEN no .env antes de expor isto a qualquer rede.
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: bula
+      POSTGRES_USER: bula
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bula -d bula"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  knowledge:
+    build: ./knowledge
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://bula:${POSTGRES_PASSWORD}@db:5432/bula
+      KNOWLEDGE_HOST: 0.0.0.0
+      DATA_DIR: /app/data
+    volumes:
+      # Modelo de embedding e banco do MLflow: fora da imagem, para não baixar a cada deploy.
+      - knowledge-data:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+  agent:
+    build: ./agent
+    env_file: .env
+    environment:
+      KNOWLEDGE_URL: http://knowledge:8100
+      AGENT_HOST: 0.0.0.0
+    ports:
+      - "8200:8200"
+    depends_on:
+      knowledge:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  knowledge-data:
