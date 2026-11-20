@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bula</title>
+    <style>
+      :root {
+        --bg: #f6f4ef;
+        --surface: #ffffff;
+        --ink: #1d1b16;
+        --muted: #6b665c;
+        --line: #e2ddd2;
+        --accent: #1f5f4a;
+        --accent-ink: #ffffff;
+        --warn: #8a4b12;
+        --warn-bg: #fbeedd;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #15140f;
+          --surface: #1e1d17;
+          --ink: #ece8dd;
+          --muted: #a09a8c;
+          --line: #33312a;
+          --accent: #6cc3a4;
+          --accent-ink: #10231c;
+          --warn: #f0c08a;
+          --warn-bg: #3a2a16;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px 16px 132px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: -0.01em;
+      }
+      header p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      #status {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      #log {
+        margin-top: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .turn {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+      .question {
+        font-weight: 600;
+        margin: 0 0 8px;
+      }
+      .steps {
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin: 0 0 8px;
+        min-height: 1.2em;
+      }
+      .answer {
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .answer.draft {
+        color: var(--muted);
+      }
+      .answer.held {
+        background: var(--warn-bg);
+        color: var(--warn);
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+      .sources {
+        margin: 12px 0 0;
+        padding: 10px 0 0;
+        border-top: 1px solid var(--line);
+        list-style: none;
+        font-size: 0.88rem;
+      }
+      .sources li {
+        margin: 4px 0;
+        overflow-wrap: anywhere;
+      }
+      .sources a {
+        color: var(--accent);
+      }
+      .meta {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+      form {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(transparent, var(--bg) 28%);
+        padding: 28px 16px 20px;
+      }
+      .composer {
+        max-width: 760px;
+        margin: 0 auto;
+        display: flex;
+        gap: 8px;
+      }
+      textarea {
+        flex: 1;
+        resize: none;
+        min-height: 48px;
+        max-height: 160px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font: inherit;
+      }
+      textarea:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      button {
+        border: 0;
+        border-radius: 12px;
+        padding: 0 18px;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: progress;
+      }
+      .examples {
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .examples button {
+        background: var(--surface);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        padding: 8px 12px;
+        font-weight: 400;
+        font-size: 0.88rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Bula</h1>
+        <p>Pergunte sobre a documentação indexada. Toda resposta vem com a fonte.</p>
+        <div id="status" role="status">Conferindo o serviço…</div>
+      </header>
+      <ul class="examples" id="examples">
+        <li><button type="button">Como registro um plugin no Fastify?</button></li>
+        <li><button type="button">Como valido um email com o Zod?</button></li>
+        <li><button type="button">Qual a versão mais recente do pacote fastify?</button></li>
+      </ul>
+      <section id="log" aria-live="polite"></section>
+    </main>
+    <form id="form">
+      <div class="composer">
+        <textarea id="input" rows="1" placeholder="Sua pergunta" aria-label="Sua pergunta" required></textarea>
+        <button id="send" type="submit">Enviar</button>
+      </div>
+    </form>
+    <script>
+      const log = document.getElementById("log");
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const send = document.getElementById("send");
+      const status = document.getElementById("status");
+      const OUTCOMES = {
+        answered: "respondido com fontes",
+        direct: "resposta direta, sem consulta",
+        not_found: "nada encontrado nas fontes",
+        tool_error: "falha ao consultar as fontes",
+        blocked: "resposta retida pelo guardrail",
+        refused: "recusado pelo modelo",
+        step_limit: "limite de passos atingido",
+      };
+      const STEPS = { agent: "pensando", tools: "lendo os resultados", finish: "conferindo as fontes", limit: "limite de passos" };
+      let threadId;
+
+      fetch("/health")
+        .then((response) => response.json())
+        .then((health) => {
+          const model = health.llm.provider === "offline" ? "modo offline, sem LLM" : health.llm.model;
+          const indexed = health.indexed.length ? health.indexed.join(", ") : "índice indisponível";
+          status.textContent = `${model} · ${indexed}`;
+        })
+        .catch(() => {
+          status.textContent = "Serviço indisponível.";
+        });
+
+      function element(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      function renderDone(turn, result) {
+        turn.steps.remove();
+        turn.answer.textContent = result.answer;
+        turn.answer.classList.remove("draft");
+        if (!["answered", "direct"].includes(result.outcome)) turn.answer.classList.add("held");
+        if (result.citations.length) {
+          const list = element("ul", "sources");
+          for (const citation of result.citations) {
+            const item = element("li");
+            item.append(`[${citation.n}] `);
+            // Só link http(s): a URL vem de terceiros.
+            if (/^https?:\/\//.test(citation.url)) {
+              const link = element("a", "", citation.title);
+              link.href = citation.url;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              item.append(link);
+            } else {
+              item.append(citation.title);
+            }
+            list.append(item);
+          }
+          turn.root.append(list);
+        }
+        const usage = result.usage;
+        const cost = usage.costUsd === undefined ? "" : ` · US$ ${usage.costUsd.toFixed(4)}`;
+        turn.root.append(
+          element(
+            "p",
+            "meta",
+            `${OUTCOMES[result.outcome] ?? result.outcome} · ${result.steps} passo(s) · ` +
+              `${usage.inputTokens + usage.outputTokens} tokens${cost} · ${(result.tookMs / 1000).toFixed(1)} s`,
+          ),
+        );
+      }
+
+      async function ask(message) {
+        const root = element("article", "turn");
+        const turn = {
+          root,
+          steps: element("p", "steps", "enviando…"),
+          answer: element("p", "answer draft"),
+        };
+        root.append(element("p", "question", message), turn.steps, turn.answer);
+        log.append(root);
+        root.scrollIntoView({ behavior: "smooth", block: "end" });
+
+        const response = await fetch("/v1/chat/stream", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ message, threadId }),
+        });
+        if (!response.ok || !response.body) {
+          const problem = await response.json().catch(() => ({}));
+          throw new Error(problem.message ?? `erro ${response.status}`);
+        }
+
+        const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+        let buffer = "";
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += value;
+          let cut;
+          while ((cut = buffer.indexOf("\n\n")) >= 0) {
+            const block = buffer.slice(0, cut);
+            buffer = buffer.slice(cut + 2);
+            const event = /^event: (.+)$/m.exec(block)?.[1];
+            const data = JSON.parse(/^data: (.+)$/m.exec(block)?.[1] ?? "null");
+            if (event === "step") {
+              turn.steps.textContent = data.tools ? `consultando ${data.tools.join(", ")}…` : `${STEPS[data.node] ?? data.node}…`;
+              if (data.node === "tools") turn.answer.textContent = "";
+            } else if (event === "token") {
+              turn.answer.textContent += data.text;
+            } else if (event === "done") {
+              threadId = data.threadId;
+              renderDone(turn, data);
+            } else if (event === "error") {
+              throw new Error(data.message);
+            }
+          }
+        }
+      }
+
+      async function submit(message) {
+        if (!message || send.disabled) return;
+        send.disabled = true;
+        input.value = "";
+        try {
+          await ask(message);
+        } catch (error) {
+          const failed = element("article", "turn");
+          failed.append(element("p", "answer held", `Não foi possível responder: ${error.message}`));
+          log.append(failed);
+        } finally {
+          send.disabled = false;
+          input.focus();
+        }
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submit(input.value.trim());
+      });
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          form.requestSubmit();
+        }
+      });
+      document.getElementById("examples").addEventListener("click", (event) => {
+        if (event.target instanceof HTMLButtonElement) submit(event.target.textContent);
+      });
+    </script>
+  </body>
+</html>
