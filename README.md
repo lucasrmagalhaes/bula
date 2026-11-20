@@ -1,5 +1,7 @@
 # Bula
 
+[![ci](https://github.com/lucasrmagalhaes/bula/actions/workflows/ci.yml/badge.svg)](https://github.com/lucasrmagalhaes/bula/actions/workflows/ci.yml)
+
 Assistente que responde perguntas sobre documentação técnica e mostra de onde tirou cada afirmação. O nome vem de "ler a bula": ele lê a documentação por você e devolve o trecho, com o link para a versão exata.
 
 São dois serviços:
@@ -205,7 +207,7 @@ O teste também achou um defeito: o guardrail retinha a recusa correta de uma pe
 ## Testes
 
 ```bash
-cd knowledge && uv run pytest            # 52 testes, com Postgres embutido
+cd knowledge && uv run pytest            # 53 testes, com Postgres embutido
 cd agent && pnpm check                   # tipos, lint e 75 testes
 cd agent && pnpm test:live               # ponta a ponta, com o serviço Python no ar
 ```
@@ -215,7 +217,7 @@ Nenhum teste precisa de chave. O modelo é trocado por um roteirizado, e os pedi
 ## Limites e o que falta verificar
 
 - **Modelo real**: só a Anthropic foi exercitada, com `claude-opus-5-5`. A recuperação do RAG tem avaliação automática; a resposta final do agente só foi conferida à mão, em nove perguntas. OpenAI e Google têm só a fábrica, nunca chamada.
-- **Docker e CI**: o `docker-compose.yml`, os dois `Dockerfile` e o workflow do GitHub Actions foram escritos e ainda não foram executados.
+- **Docker**: o `docker-compose.yml` e os dois `Dockerfile` foram escritos e ainda não foram construídos. O CI, este sim, roda lint, tipos e testes dos dois serviços a cada push, em Linux.
 - **Databricks**: o MLflow roda local. Apontar `MLFLOW_TRACKING_URI` para um workspace não foi testado. Registro e serving de modelo não foram feitos.
 - **Memória de conversa**: fica em memória do processo, com descarte da menos usada. Com mais de uma réplica, precisa de um checkpointer em Postgres.
 - **Modo offline**: é uma demonstração sem LLM. A triagem vira um corte por distância e a pergunta em português perde qualidade.
