@@ -108,7 +108,11 @@ def holds_pgserver(pid: object) -> bool:
     try:
         import psutil
 
-        return "python" in psutil.Process(pid).name().lower()
+        # O executável, e não o nome do processo: no Linux um serviço iniciado pelo
+        # script `bula-knowledge` ou pelo `pytest` leva o nome do script, mas roda no
+        # interpretador Python.
+        executable = Path(psutil.Process(pid).exe()).name.lower()
+        return executable.startswith(("python", "pypy"))
     except Exception:
         # Processo inexistente, sem permissão para ler ou psutil ausente: não conta.
         return False

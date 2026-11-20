@@ -33,8 +33,10 @@ def test_reused_pid_of_another_program_does_not_count(
         def __init__(self, pid: int) -> None:
             self.pid = pid
 
-        def name(self) -> str:
-            return "python.exe" if self.pid == os.getpid() else "StartMenuExperienceHost.exe"
+        def exe(self) -> str:
+            if self.pid == os.getpid():
+                return "/opt/venv/bin/python3.12"
+            return "C:/Windows/SystemApps/StartMenuExperienceHost.exe"
 
     monkeypatch.setattr(psutil, "Process", _OtherProgram)
     handles = tmp_path / ".handle_pids.json"
@@ -44,6 +46,13 @@ def test_reused_pid_of_another_program_does_not_count(
 
     assert json.loads(handles.read_text()) == [os.getpid()]
     assert holds_pgserver("12184") is False
+
+
+def test_process_started_by_a_console_script_still_counts() -> None:
+    # No Linux, `uv run pytest` e `bula-knowledge serve` aparecem com o nome do script, não
+    # "python". Tomar esse processo por morto pararia o Postgres embaixo de um serviço vivo
+    # (foi o que o CI pegou). Este teste roda dentro de um processo assim.
+    assert holds_pgserver(os.getpid()) is True
 
 
 def test_missing_or_broken_handle_list_is_left_alone(tmp_path: Path) -> None:
