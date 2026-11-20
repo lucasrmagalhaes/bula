@@ -1,0 +1,15 @@
+import { Callout } from "fictional-ui";
+
+# Error codes
+
+<Callout type="warn">
+Every Kiteq error carries a stable code.
+</Callout>
+
+## KQ1042
+
+Raised when a worker loses its lock on a job because the visibility timeout expired. Increase `lockDurationMs` or make the handler faster.
+
+## KQ2001
+
+Raised when the connection to the broker is refused. Check the host and the port.

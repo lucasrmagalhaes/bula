@@ -1,0 +1,47 @@
+// Conjunto ouro da busca. Cada caso: a pergunta e trechos de URL dos documentos em que a resposta está.
+// kind: "paraphrase" é pergunta em linguagem natural; "identifier" é um nome exato (função, opção, código de erro).
+// Corpus: fastify@v5.12.8 e zod@v4.6.7. Ao trocar de versão, confira as expectativas.
+{"id": "fastify-hooks-en", "lang": "en", "kind": "paraphrase", "question": "How do I run code before every request in Fastify?", "expect": ["Reference/Hooks.md"]}
+{"id": "fastify-hooks-pt", "lang": "pt", "kind": "paraphrase", "question": "Como executo um código antes de cada requisição no Fastify?", "expect": ["Reference/Hooks.md"]}
+{"id": "fastify-plugin-en", "lang": "en", "kind": "paraphrase", "question": "How do I register a plugin in Fastify?", "expect": ["Reference/Plugins.md", "Guides/Plugins-Guide.md", "Server.md#register", "Guides/Getting-Started.md"]}
+{"id": "fastify-plugin-pt", "lang": "pt", "kind": "paraphrase", "question": "Como registro um plugin no Fastify?", "expect": ["Reference/Plugins.md", "Guides/Plugins-Guide.md", "Server.md#register", "Guides/Getting-Started.md"]}
+{"id": "fastify-decorators-en", "lang": "en", "kind": "paraphrase", "question": "How can I add a custom property to the request object?", "expect": ["Reference/Decorators.md"]}
+{"id": "fastify-decorators-pt", "lang": "pt", "kind": "paraphrase", "question": "Como adiciono uma propriedade minha ao objeto de requisição?", "expect": ["Reference/Decorators.md"]}
+{"id": "fastify-validation-en", "lang": "en", "kind": "paraphrase", "question": "How do I validate the request body with a JSON schema?", "expect": ["Reference/Validation-and-Serialization.md"]}
+{"id": "fastify-validation-pt", "lang": "pt", "kind": "paraphrase", "question": "Como valido o corpo da requisição com um schema JSON?", "expect": ["Reference/Validation-and-Serialization.md"]}
+{"id": "fastify-errors-en", "lang": "en", "kind": "paraphrase", "question": "How do I customize the error response sent to the client?", "expect": ["Reference/Errors.md", "Server.md#seterrorhandler", "Reference/Reply.md"]}
+{"id": "fastify-errors-pt", "lang": "pt", "kind": "paraphrase", "question": "Como personalizo a resposta de erro enviada ao cliente?", "expect": ["Reference/Errors.md", "Server.md#seterrorhandler", "Reference/Reply.md"]}
+{"id": "fastify-logging-en", "lang": "en", "kind": "paraphrase", "question": "How do I enable logging and change the log level?", "expect": ["Reference/Logging.md", "Server.md#logger"]}
+{"id": "fastify-logging-pt", "lang": "pt", "kind": "paraphrase", "question": "Como habilito os logs e mudo o nível de log?", "expect": ["Reference/Logging.md", "Server.md#logger"]}
+{"id": "fastify-testing-en", "lang": "en", "kind": "paraphrase", "question": "How can I test my routes without starting the server?", "expect": ["Guides/Testing.md"]}
+{"id": "fastify-testing-pt", "lang": "pt", "kind": "paraphrase", "question": "Como testo minhas rotas sem subir o servidor?", "expect": ["Guides/Testing.md"]}
+{"id": "fastify-serverless-en", "lang": "en", "kind": "paraphrase", "question": "Can I deploy a Fastify application to AWS Lambda?", "expect": ["Guides/Serverless.md"]}
+{"id": "fastify-serverless-pt", "lang": "pt", "kind": "paraphrase", "question": "Posso publicar uma aplicação Fastify no AWS Lambda?", "expect": ["Guides/Serverless.md"]}
+{"id": "fastify-lifecycle-en", "lang": "en", "kind": "paraphrase", "question": "In what order are the steps of a request executed?", "expect": ["Reference/Lifecycle.md", "Reference/Hooks.md"]}
+{"id": "fastify-lifecycle-pt", "lang": "pt", "kind": "paraphrase", "question": "Em que ordem as etapas de uma requisição são executadas?", "expect": ["Reference/Lifecycle.md", "Reference/Hooks.md"]}
+{"id": "zod-email-en", "lang": "en", "kind": "paraphrase", "question": "How do I validate an email address with Zod?", "expect": ["api.mdx#emails", "custom-email-regex"]}
+{"id": "zod-email-pt", "lang": "pt", "kind": "paraphrase", "question": "Como valido um endereço de email com o Zod?", "expect": ["api.mdx#emails", "custom-email-regex"]}
+{"id": "zod-parse-en", "lang": "en", "kind": "paraphrase", "question": "How do I validate data without throwing an exception when it is invalid?", "expect": ["basics.mdx"]}
+{"id": "zod-parse-pt", "lang": "pt", "kind": "paraphrase", "question": "Como valido um dado sem lançar exceção quando ele é inválido?", "expect": ["basics.mdx"]}
+{"id": "zod-infer-en", "lang": "en", "kind": "paraphrase", "question": "How do I get the TypeScript type from a schema?", "expect": ["basics.mdx#inferring-types", "api.mdx"]}
+{"id": "zod-infer-pt", "lang": "pt", "kind": "paraphrase", "question": "Como obtenho o tipo TypeScript a partir de um schema?", "expect": ["basics.mdx#inferring-types", "api.mdx"]}
+{"id": "zod-messages-en", "lang": "en", "kind": "paraphrase", "question": "How do I change the error message of a schema?", "expect": ["error-customization.mdx"]}
+{"id": "zod-messages-pt", "lang": "pt", "kind": "paraphrase", "question": "Como mudo a mensagem de erro de um schema?", "expect": ["error-customization.mdx"]}
+{"id": "zod-jsonschema-en", "lang": "en", "kind": "paraphrase", "question": "Can I convert a Zod schema into JSON Schema?", "expect": ["json-schema.mdx"]}
+{"id": "zod-jsonschema-pt", "lang": "pt", "kind": "paraphrase", "question": "Consigo converter um schema do Zod em JSON Schema?", "expect": ["json-schema.mdx"]}
+{"id": "zod-migration-en", "lang": "en", "kind": "paraphrase", "question": "What are the breaking changes when upgrading from Zod 3 to Zod 4?", "expect": ["v4/changelog.mdx"]}
+{"id": "zod-migration-pt", "lang": "pt", "kind": "paraphrase", "question": "Quais mudanças quebram compatibilidade ao migrar do Zod 3 para o Zod 4?", "expect": ["v4/changelog.mdx"]}
+{"id": "zod-metadata-en", "lang": "en", "kind": "paraphrase", "question": "How do I attach a description or other metadata to a schema?", "expect": ["metadata.mdx"]}
+{"id": "zod-metadata-pt", "lang": "pt", "kind": "paraphrase", "question": "Como associo uma descrição ou outros metadados a um schema?", "expect": ["metadata.mdx"]}
+{"id": "id-fastify-error-code", "lang": "en", "kind": "identifier", "question": "FST_ERR_CTP_INVALID_MEDIA_TYPE", "expect": ["Reference/Errors.md", "Reference/ContentTypeParser.md"]}
+{"id": "id-fastify-notfound", "lang": "en", "kind": "identifier", "question": "setNotFoundHandler", "expect": ["Reference/Server.md", "Reference/Reply.md", "Reference/Routes.md"]}
+{"id": "id-fastify-abort", "lang": "en", "kind": "identifier", "question": "onRequestAbort", "expect": ["Reference/Hooks.md"]}
+{"id": "id-fastify-hijack", "lang": "pt", "kind": "identifier", "question": "o que faz o reply.hijack", "expect": ["Reference/Reply.md"]}
+{"id": "id-fastify-preserialization", "lang": "pt", "kind": "identifier", "question": "quando roda o preSerialization", "expect": ["Reference/Hooks.md"]}
+{"id": "id-fastify-content-type", "lang": "en", "kind": "identifier", "question": "addContentTypeParser", "expect": ["Reference/ContentTypeParser.md"]}
+{"id": "id-zod-tojsonschema", "lang": "en", "kind": "identifier", "question": "z.toJSONSchema", "expect": ["json-schema.mdx"]}
+{"id": "id-zod-prettify", "lang": "en", "kind": "identifier", "question": "z.prettifyError", "expect": ["error-formatting.mdx"]}
+{"id": "id-zod-treeify", "lang": "pt", "kind": "identifier", "question": "para que serve o z.treeifyError", "expect": ["error-formatting.mdx"]}
+{"id": "id-zod-registry", "lang": "en", "kind": "identifier", "question": "z.registry", "expect": ["metadata.mdx"]}
+{"id": "id-zod-codec", "lang": "pt", "kind": "identifier", "question": "como usar o z.codec", "expect": ["codecs.mdx"]}
+{"id": "id-zod-discriminated", "lang": "en", "kind": "identifier", "question": "discriminatedUnion", "expect": ["api.mdx#discriminated-unions", "v4/index.mdx"]}
